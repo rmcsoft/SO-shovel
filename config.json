@@ -1,0 +1,12 @@
+{
+    "port" : 1337,
+    "mongoose": {
+        "uri": "mongodb://localhost:27017/rd-stackoverflow"
+    },
+    "scoreThreshold": 0,
+    
+    "tags": ["nginx", "tomcat", "glassfish"],
+    "separator": ",",
+    "normalizedDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/normalized-dump.csv",
+    "dumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Posts.xml"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "stackoverflow-adapter",
+  "version": "1.0.0",
+  "description": "Adapter to normalize Stackoverflow posts dump and provide it in CSV format.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "stackoverflow",
+    "adapter"
+  ],
+  "author": "Dmitry Lebedko",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.4",
+    "mongoose": "^4.11.8",
+    "morgan": "^1.8.2",
+    "nconf": "^0.8.4",
+    "node-expat": "^2.3.16",
+    "serve-favicon": "^2.4.3",
+    "winston": "^2.3.1"
+  }
+}

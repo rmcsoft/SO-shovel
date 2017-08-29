@@ -1,0 +1,4 @@
+node_modules
+.vscode
+import-info.properties
+bower_components/
