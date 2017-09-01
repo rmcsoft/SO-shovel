@@ -102,7 +102,7 @@
     let writeCsvFile = function () {
         let soDumpStream = getNormalizedDump();
         let localStream = getLocalPosts();
-        csvWriter.write(normalizedDumpFilepath, soDumpStream, localStream);
+        return csvWriter.write(normalizedDumpFilepath, soDumpStream, localStream);
     }
 
     let updateDump = function () {
@@ -141,8 +141,13 @@
     });
 
     app.get('/api/write-csv', function (req, res) {
-        writeCsvFile();
-        res.send('Csv will be written');
+        writeCsvFile().then(results => {
+            res.send('CSV file with SO normalized data successfully written in ' + normalizedDumpFilepath);
+        })
+        .catch(err => {
+            res.statusCode = 500;
+            res.send(err);
+        });
     });
 
     app.post('/api/posts', function (req, res) {

@@ -5,7 +5,7 @@
     },
     "scoreThreshold": 0,
     
-    "tags": ["nginx", "tomcat", "glassfish"],
+    "tags": ["nginx"],
     "separator": ",",
     "normalizedDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/normalized-dump.csv",
     "dumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Posts.xml"

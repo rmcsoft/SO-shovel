@@ -46,63 +46,64 @@
             }
 
             let writeStreamIntoCsvFile = function (stream, valuePreprocessor, rowEnricher) {
-                stream.on('data', function (item) {
+                return new Promise((resolve, reject) => {
+                    stream.on('data', function (item) {
 
-                    let document = item._doc;
-                    let csvHeader = '';
-                    if (isFirstItem) {
-                        let properies = Object.keys(item._doc);
-                        for (let i = 0; i < properies.length; i++) {
-                            if (i) {
-                                csvHeader = csvHeader + SEPARATOR;
+                        let document = item._doc;
+                        let csvHeader = '';
+                        if (isFirstItem) {
+                            let properies = Object.keys(item._doc);
+                            for (let i = 0; i < properies.length; i++) {
+                                if (i) {
+                                    csvHeader = csvHeader + SEPARATOR;
+                                }
+                                let property = properies[i];
+                                csvHeader = csvHeader + property;
                             }
-                            let property = properies[i];
-                            csvHeader = csvHeader + property;
+                            appendCsvRow(csvHeader);
                         }
-                        appendCsvRow(csvHeader);
-                    }
-                    isFirstItem = false;
+                        isFirstItem = false;
 
-                    let row = '';
+                        let row = '';
 
-                    let appendHandler = function () {
-                        Object.keys(document).forEach(function (key, index) {
-                            let value = document[key];
-                            if (valuePreprocessor) {
-                                value = valuePreprocessor(key, value);
-                            }
-                            // escape double quotes
-                            if (typeof value === 'string') {
-                                value = value.replace(new RegExp('"', 'g'), '""');
-                            }
-    
-                            if (index) {
-                                row = row + SEPARATOR;
-                            }
-                            // wrap value in double quotes
-                            row = row + '"' + value + '"';
-                        });
-                        appendCsvRow(row);
-                        rowCount++; 
-                    }
+                        let appendHandler = function () {
+                            Object.keys(document).forEach(function (key, index) {
+                                let value = document[key];
+                                if (valuePreprocessor) {
+                                    value = valuePreprocessor(key, value);
+                                }
+                                // escape double quotes
+                                if (typeof value === 'string') {
+                                    value = value.replace(new RegExp('"', 'g'), '""');
+                                }
 
-                    if (rowEnricher) {
-                        rowEnricher(document).on('close', function () {
+                                if (index) {
+                                    row = row + SEPARATOR;
+                                }
+                                // wrap value in double quotes
+                                row = row + '"' + value + '"';
+                            });
+                            appendCsvRow(row);
+                            //console.log(row);
+                            rowCount++;
+                        }
+
+                        if (rowEnricher) {
+                            rowEnricher(document).on('close', function () {
+                                appendHandler();
+                            });
+                        }
+                        else {
                             appendHandler();
-                        });
-                    }
-                    else {
-                        appendHandler();
-                    }
-                }).on('error', function (err) {
-                    log.info(err);
-                }).on('close', function () {
-                    log.info('Normalized dump was successfully written to ' + filepath);
-                    log.info('Written ' + rowCount + ' lines');
+                        }
+                    }).on('error', function (err) {
+                        reject(err);
+                    }).on('close', function () {
+                        resolve('Normalized dump was successfully written to ' + filepath + '.\r\n' + 'Written ' + rowCount + ' lines');
+                    });
                 });
             }
-            writeStreamIntoCsvFile(streamItems, soValuePreprocessor, questionEnricher);
-            writeStreamIntoCsvFile(localStreamItems);
+            return Promise.all([writeStreamIntoCsvFile(streamItems, soValuePreprocessor, questionEnricher), writeStreamIntoCsvFile(localStreamItems)]);
         }
     }
 })();

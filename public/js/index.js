@@ -1,15 +1,33 @@
 $(window).on('load', function () {
 
+    let toggleButtons = function () {
+        $('#extractNormalizedDataBtn').prop('disabled', !$('#extractNormalizedDataBtn').prop('disabled'));
+        $('#updateSoDumpBtn').prop('disabled', !$('#updateSoDumpBtn').prop('disabled'));
+    }
+
+    let startProcess = function () {
+        toggleButtons();
+        NProgress.start();
+    }
+
+    let endProcess = function () {
+        toggleButtons();
+        NProgress.done();
+    }
+
     $('#extractNormalizedDataBtn').click(function () {
+        startProcess();
         $.ajax({
             url: "/api/write-csv",
             method: "GET",
             contentType: "application/json"
         }).done(function (msg) {
+            endProcess();
             new Noty({
                 text: msg
             }).show();
         }).fail(function (jqXHR, textStatus) {
+            endProcess();
             new Noty({
                 type: 'error',
                 text: JSON.stringify(jqXHR) + '' + textStatus
@@ -18,15 +36,18 @@ $(window).on('load', function () {
     });
 
     $('#updateSoDumpBtn').click(function () {
+        startProcess();
         $.ajax({
             url: "/api/update-dump",
             method: "GET",
             contentType: "application/json"
         }).done(function (msg) {
+            endProcess();
             new Noty({
                 text: msg
             }).show();
         }).fail(function (jqXHR, textStatus) {
+            endProcess();
             new Noty({
                 type: 'error',
                 text: JSON.stringify(jqXHR) + '' + textStatus
