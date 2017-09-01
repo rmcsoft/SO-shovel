@@ -36,6 +36,11 @@ Method|URI|Description
 GET|/api|Checks if REST API is working
 POST|/api/posts|Accepts message as JSON and stores it in MongoDB
 GET|/api/dump/info|Retrieves info about last installed SO dump
+GET|/api/dump/installed|Retrieves info about installed SO dump
+GET|/api/config|Retrieves app configuration
+GET|/api/update-dump|Triggers dump update
+GET|/api/write-csv|Triggers writing of normalized dump into CSV file
+
 ### How to update SO dump
 1. Download dump manually from https://archive.org/details/stackexchange
 2. Unzip it and place somewhere. Let's call this location **${dump_path}**

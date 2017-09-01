@@ -59,25 +59,31 @@
 
     let getDumpFileInfo = function () {
         let stats = fs.statSync(dumpFilename);
-
-        let fileStats = {
-            'mtime': stats.mtime,
-            'size': stats.size
-        };
-        return fileStats.mtime + fileStats.size;
+        return stats;
     }
 
     let saveDumpFileInfo = function () {
         let fileStats = getDumpFileInfo();
         let importInfoFile = fs.createWriteStream(IMPORT_INFO_PATH, { flags: 'w' });
-        importInfoFile.write(fileStats);
+        importInfoFile.write(JSON.stringify(fileStats));
+    }
+
+    let getDumpFileStats = function () {
+        let fileStats = JSON.parse(fs.readFileSync(IMPORT_INFO_PATH, 'utf8'));
+        fileStats.mtime = new Date(fileStats.mtime);
+        return fileStats;
+    }
+
+    let isDumpStatsEqual = function (oldFileStats, newFileStats) {
+        return oldFileStats.mtime.getTime() === newFileStats.mtime.getTime() &&
+            oldFileStats.size === newFileStats.size;
     }
 
     let isDumpNeedToBeUpdated = function () {
         if (fs.existsSync(IMPORT_INFO_PATH)) {
-            let oldFileStats = fs.readFileSync(IMPORT_INFO_PATH, 'utf8');
+            let oldFileStats = getDumpFileStats();
             let newFileStats = getDumpFileInfo();
-            let isNeedToBeUpdated = oldFileStats !== newFileStats;
+            let isNeedToBeUpdated = !isDumpStatsEqual(oldFileStats, newFileStats);
             if (isNeedToBeUpdated) {
                 log.info('Dump file will be loaded and database will be updated.');
             }
@@ -101,9 +107,10 @@
 
     let updateDump = function () {
         if (dumpFilename && fs.existsSync(dumpFilename) && isDumpNeedToBeUpdated()) {
+            saveDumpFileInfo();
             stream = postLoader.load(dumpFilename);
             stream.on('end', function () {
-                saveDumpFileInfo();       
+                saveDumpFileInfo();
             });
         }
     }
@@ -120,6 +127,17 @@
     app.get('/api/update-dump', function (req, res) {
         updateDump();
         res.send('Dump will be written');
+    });
+
+    app.get('/api/dump/installed', function (req, res) {
+        res.send(getDumpFileStats());
+    });
+
+    app.get('/api/config', function (req, res) {
+        let conf = config.get();
+        delete conf['$0'];
+        delete conf['_'];
+        res.send(conf);
     });
 
     app.get('/api/write-csv', function (req, res) {
