@@ -141,8 +141,8 @@
     });
 
     app.get('/api/write-csv', function (req, res) {
-        writeCsvFile().then(results => {
-            res.send('CSV file with SO normalized data successfully written in ' + normalizedDumpFilepath);
+        writeCsvFile().then(result => {
+            res.send(result);
         })
         .catch(err => {
             res.statusCode = 500;

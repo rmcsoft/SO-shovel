@@ -1,8 +1,10 @@
 (function () {
     let PostModel = require('./mongoose').PostModel,
+        archiver = require('archiver'),
         fs = require('fs'),
         log = require('./log')(module),
-        config = require('./config');
+        config = require('./config'),
+        path = require('path');
 
     const SEPARATOR = config.get('separator') ? config.get('separator') : ';';
 
@@ -103,7 +105,24 @@
                     });
                 });
             }
-            return Promise.all([writeStreamIntoCsvFile(streamItems, soValuePreprocessor, questionEnricher), writeStreamIntoCsvFile(localStreamItems)]);
+            return Promise.all([writeStreamIntoCsvFile(streamItems, soValuePreprocessor, questionEnricher), writeStreamIntoCsvFile(localStreamItems)])
+            .then(function (result) {
+                return new Promise((resolve, reject) => {
+
+                    let output = fs.createWriteStream(filepath.replace('.csv', '.zip'));
+                    let archive = archiver('zip', {
+                        'zlib': { level: 9 }
+                    });
+                    archive.pipe(output);
+                    archive.append(fs.createReadStream(filepath), { name: path.basename(filepath) });
+                    archive.finalize();
+
+                    resolve('CSV file with SO normalized data successfully written in ' + filepath);
+                });
+            })
+            .catch(function (err) {
+                return new Promise((resolve, reject) => { reject(err) });
+            });
         }
     }
 })();

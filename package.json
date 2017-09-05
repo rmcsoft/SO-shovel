@@ -13,6 +13,7 @@
   "author": "Dmitry Lebedko",
   "license": "ISC",
   "dependencies": {
+    "archiver": "^2.0.3",
     "body-parser": "^1.17.2",
     "express": "^4.15.4",
     "mongoose": "^4.11.8",
