@@ -1,8 +1,8 @@
 (function () {
     let expat = require('node-expat'),
     fs = require('fs'),
-    UserModel = require('./mongoose').UserModel,    
-    log = require('./log')(module);
+    UserModel = require('../database/mongoose').UserModel,    
+    log = require('../log')(module);
 
     let parser = new expat.Parser('UTF-8');
 

@@ -1,12 +1,12 @@
 (function () {
     let expat = require('node-expat'),
     fs = require('fs'),
-    PostModel = require('./mongoose').PostModel,    
-    log = require('./log')(module);
+    PostModel = require('../database/mongoose').PostModel,    
+    log = require('../log')(module);
 
     let parser = new expat.Parser('UTF-8');
 
-    let POST_TYPES = require('./post-types');
+    let POST_TYPES = require('../post-types');
 
     let postToPostModel = function (post) {
         let postModel = new PostModel({

@@ -1,11 +1,11 @@
 (function () {
     let mongoose = require('mongoose'),
-    log = require('./log')(module),
-    config = require('./config');
+    log = require('../log')(module),
+    config = require('../config');
 
-    let userSchema = require('./user-schema'),
-    postSchema = require('./post-schema'),
-    localPostSchema = require('./local-post-model'),
+    let userSchema = require('./schemas/user-schema'),
+    postSchema = require('./schemas/post-schema'),
+    localPostSchema = require('./schemas/local-post-schema'),
     LocalPostModel = mongoose.model('LocalPost', localPostSchema),
     UserModel = mongoose.model('User', userSchema),
     PostModel = mongoose.model('Post', postSchema);

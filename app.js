@@ -1,17 +1,17 @@
 (function () {
-    let config = require('./libs/config'),
+    let config = require('./components/config'),
         express = require('express'),
         path = require('path'),
         morgan = require('morgan'),
         fs = require('fs'),
         bodyParser = require('body-parser'),
 
-        PostModel = require('./libs/mongoose').PostModel,
-        LocalPostModel = require('./libs/mongoose').LocalPostModel,
-        log = require('./libs/log')(module),
-        postLoader = require('./libs/post-loader'),
-        usersLoader = require('./libs/user-loader'),
-        csvWriter = require('./libs/csv-writer');
+        PostModel = require('./components/database/mongoose').PostModel,
+        LocalPostModel = require('./components/database/mongoose').LocalPostModel,
+        log = require('./components/log')(module),
+        postLoader = require('./components/loaders/post-loader'),
+        usersLoader = require('./components/loaders/user-loader'),
+        csvWriter = require('./components/csv-writer');
 
     let IMPORT_INFO_PATH = './import-info.properties';
 

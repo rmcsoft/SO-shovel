@@ -1,6 +1,6 @@
 (function () {
-    let PostModel = require('./mongoose').PostModel,
-        UserModel = require('./mongoose').UserModel,
+    let PostModel = require('./database/mongoose').PostModel,
+        UserModel = require('./database/mongoose').UserModel,
         archiver = require('archiver'),
         fs = require('fs'),
         log = require('./log')(module),
