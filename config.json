@@ -3,10 +3,21 @@
     "mongoose": {
         "uri": "mongodb://localhost:27017/rd-stackoverflow"
     },
-    "scoreThreshold": 0,
-    
-    "tags": ["nginx"],
+    "filters": {
+        "questions": {
+            "tags": ["nginx"],
+            "scoreThreshold": 5,
+            "favoriteCount": 10,
+            "userReputation": 900
+        },
+        "answers": {
+            "scoreThreshold": 3,
+            "favoriteCount": 5,
+            "userReputation": 1000
+        }
+    },
     "separator": ",",
     "normalizedDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/normalized-dump.csv",
-    "dumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Posts.xml"
+    "dumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Posts.xml",
+    "usersDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Users.xml"
 }

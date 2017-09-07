@@ -10,27 +10,34 @@
         LocalPostModel = require('./libs/mongoose').LocalPostModel,
         log = require('./libs/log')(module),
         postLoader = require('./libs/post-loader'),
+        usersLoader = require('./libs/user-loader'),
         csvWriter = require('./libs/csv-writer');
 
     let IMPORT_INFO_PATH = './import-info.properties';
 
     let app = express();
 
-    let scoreThreshold = config.get('scoreThreshold'),
+    let questionsScoreThreshold = config.get('filters:questions:scoreThreshold'),
+        questionsFavoriteCount = config.get('filters:questions:favoriteCount'),
+        questionsUserReputation = config.get('filters:questions:userReputation');
+        questionsTags = config.get('filters:questions:tags'),
         dumpFilename = config.get('dumpFilepath'),
+        usersDumpFilepath = config.get('usersDumpFilepath'),
         normalizedDumpFilepath = config.get('normalizedDumpFilepath'),
-        tags = config.get('tags');
+        answersScoreThreshold = config.get('filters:answers:scoreThreshold'),
+        answersFavoriteCount = config.get('filters:answers:favoriteCount'),
+        answersUserReputation = config.get('filters:answers:userReputation');
 
     let getNormalizedDump = function () {
 
         let searchByTags = {},
             searchTags = '';
 
-        for (let i = 0; i < tags.length; i++) {
+        for (let i = 0; i < questionsTags.length; i++) {
             if (i) {
                 searchTags = searchTags + '|';
             }
-            searchTags = searchTags + tags[i];
+            searchTags = searchTags + questionsTags[i];
         }
 
         if (searchTags) {
@@ -38,7 +45,7 @@
         };
 
         let scoreSearch = {
-            'score': { $gt: scoreThreshold }
+            'score': { $gt: questionsScoreThreshold }
         };
 
         return PostModel
@@ -46,7 +53,7 @@
             .find({ 'postTypeId': { '$eq': 1 } })
             .find(scoreSearch)
             .find(searchByTags)
-            .select({ '_id': 0, 'id': 1, 'body': 1, 'tags': 1 })
+            .select({ '_id': 0, 'id': 1, 'body': 1, 'tags': 1, 'ownerUserId': 1 })
             .cursor();
     }
 
@@ -107,12 +114,25 @@
 
     let updateDump = function () {
         if (dumpFilename && fs.existsSync(dumpFilename) && isDumpNeedToBeUpdated()) {
-            saveDumpFileInfo();
             stream = postLoader.load(dumpFilename);
             stream.on('end', function () {
                 saveDumpFileInfo();
             });
         }
+    }
+
+    let updateUsersDump = function () {
+        return new Promise((resolve, reject) => {
+            if (usersDumpFilepath && fs.existsSync(usersDumpFilepath)) {
+                let stream = usersLoader.load(usersDumpFilepath);
+                stream.on('end', function () {
+                    resolve('Users were successfully updated');
+                });
+            }
+            else {
+                resolve('Users will not be updated');
+            }
+        })
     }
 
     app.use(morgan('combined'));
@@ -127,6 +147,12 @@
     app.get('/api/update-dump', function (req, res) {
         updateDump();
         res.send('Dump will be written');
+    });
+
+    app.get('/api/users/update', function (req, res) {
+        updateUsersDump().then(function (response) {
+            res.send('Users dump successfully updated');
+        });
     });
 
     app.get('/api/dump/installed', function (req, res) {

@@ -1,9 +1,9 @@
 (function () {
-    
+
     let mongoose = require('mongoose');
     let Schema = mongoose.Schema;
 
-    module.exports = new Schema({
+    let PostSchema = new Schema({
         id: { type: Number, required: true, unique: true },
         postTypeId: { type: Number, required: true },
         acceptedAnswerId: { type: Number, required: false },
@@ -28,4 +28,7 @@
 
         postType: { type: String, required: false }
     });
+
+    module.exports = PostSchema;
+
 })();

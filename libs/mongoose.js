@@ -3,12 +3,14 @@
     log = require('./log')(module),
     config = require('./config');
 
-    let postSchema = require('./post-schema'),
+    let userSchema = require('./user-schema'),
+    postSchema = require('./post-schema'),
     localPostSchema = require('./local-post-model'),
-    PostModel = mongoose.model('Post', postSchema),
-    LocalPostModel = mongoose.model('LocalPost', localPostSchema);
+    LocalPostModel = mongoose.model('LocalPost', localPostSchema),
+    UserModel = mongoose.model('User', userSchema),
+    PostModel = mongoose.model('Post', postSchema);
 
-    // mongoose.set('debug', true);
+    //mongoose.set('debug', true);
     mongoose.Promise = global.Promise;
 
     let dbPromise = mongoose.connect(config.get('mongoose:uri'), {
@@ -27,4 +29,5 @@
 
     module.exports.LocalPostModel = LocalPostModel;
     module.exports.PostModel = PostModel;
+    module.exports.UserModel = UserModel;
 })();

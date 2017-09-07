@@ -3,6 +3,7 @@ $(window).on('load', function () {
     let toggleButtons = function () {
         $('#extractNormalizedDataBtn').prop('disabled', !$('#extractNormalizedDataBtn').prop('disabled'));
         $('#updateSoDumpBtn').prop('disabled', !$('#updateSoDumpBtn').prop('disabled'));
+        $('#updateSoUserDumpBtn').prop('disabled', !$('#updateSoUserDumpBtn').prop('disabled'));
     }
 
     let startProcess = function () {
@@ -39,6 +40,26 @@ $(window).on('load', function () {
         startProcess();
         $.ajax({
             url: "/api/update-dump",
+            method: "GET",
+            contentType: "application/json"
+        }).done(function (msg) {
+            endProcess();
+            new Noty({
+                text: msg
+            }).show();
+        }).fail(function (jqXHR, textStatus) {
+            endProcess();
+            new Noty({
+                type: 'error',
+                text: JSON.stringify(jqXHR) + '' + textStatus
+            }).show();
+        });
+    });
+
+    $('#updateSoUserDumpBtn').click(function () {
+        startProcess();
+        $.ajax({
+            url: "/api/users/update",
             method: "GET",
             contentType: "application/json"
         }).done(function (msg) {
