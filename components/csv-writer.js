@@ -9,6 +9,12 @@
 
     const SEPARATOR = config.get('separator') ? config.get('separator') : ';';
 
+    let answersScoreThreshold = config.get('filters:answers:scoreThreshold'),
+        answersFavoriteCount = config.get('filters:answers:favoriteCount'),
+        answersUserReputation = config.get('filters:answers:userReputation'),
+        questionsUserReputation = config.get('filters:questions:userReputation'),
+        fields = config.get('fields');
+
     let soValuePreprocessor = function (property, value) {
         if (property === 'tags') {
             value = value.replace(new RegExp('><', 'g'), ',')
@@ -50,13 +56,33 @@
                 });
             }
 
+            let filterQuestionByOwnerUserReputation = function (question) {
+                return question.ownerUserReputation > questionsUserReputation;
+            }
+
             let questionEnricher = function (document) {
                 return new Promise((resolve, reject) => {
-                    let cursor = PostModel
+                    let answerQuery = PostModel
                         .find({ 'parentId': { '$eq': document.id } })
-                        .find({ 'postTypeId': { '$eq': 2 } })
-                        .select({ '_id': 0, 'id': 1, 'body': 1, 'tags': 1 })
-                        .cursor();
+                        .find({ 'postTypeId': { '$eq': 2 } });
+
+                    if (answersScoreThreshold) {
+                        let scoreSearch = {
+                            'score': { $gt: answersScoreThreshold }
+                        };
+                        answerQuery.find(scoreSearch);
+                    }
+
+                    if (answersFavoriteCount) {
+                        let answersFavoriteCountSearch = {
+                            'favoriteCount': { $gt: answersFavoriteCount }
+                        };
+                        answerQuery.find(answersFavoriteCountSearch);
+                    }
+
+                    let cursor = answerQuery
+                            .select({ '_id': 0, 'id': 1, 'body': 1, 'tags': 1 })
+                            .cursor();
                     let idx = 0;
                     cursor.on('data', function (answer) {
                         idx++;
@@ -68,12 +94,8 @@
                 });
             }
 
-            let writeStreamIntoCsvFile = function (stream, valuePreprocessor, enrichers) {
+            let writeStreamIntoCsvFile = function (stream, valuePreprocessor, enrichers, filters) {
                 return new Promise((resolve, reject) => {
-
-                    let csvHeader = '';
-                    let csvHeaders = [];
-                    let isFirstItem = true;
 
                     stream.on('data', function (item) {
 
@@ -84,49 +106,44 @@
                         // on all promises completed the document can be written to the file
                         Promise.all(enrichers.map(callback => callback(document))).then(function (results) {
 
-                            if (isFirstItem) {
-                                let properies = Object.keys(item._doc);
-                                for (let i = 0; i < properies.length; i++) {
-                                    if (i) {
-                                        csvHeader = csvHeader + SEPARATOR;
-                                    }
-                                    let property = properies[i];
-                                    csvHeader = csvHeader + property;
-                                    csvHeaders.push(property);
-                                }
-                                appendCsvRow(csvHeader);
-                            }
-                            isFirstItem = false;
+                            let isAdded = true;
 
-                            let row = '';
+                            filters.map(filter => isAdded = filter(document));
 
-                            let appendHandler = function () {
-                                csvHeaders.map((key, index) => {
-                                    let value = document[key];
+                            if (isAdded) {
 
-                                    if (!value) {
-                                        value = '';
-                                    }
+                                let appendHandler = function () {
 
-                                    if (valuePreprocessor) {
-                                        value = valuePreprocessor(key, value);
-                                    }
-                                    // escape double quotes
-                                    if (typeof value === 'string') {
-                                        value = value.replace(new RegExp('"', 'g'), '""');
-                                    }
+                                    let theRestOfTheFields = Object.keys(document).filter(property => fields.indexOf(property) == -1 && property.startsWith('answer'));
+
+                                    fields.concat(theRestOfTheFields.sort()).forEach(function (key, index) {
+                                        let value = document[key];
     
-                                    if (index) {
-                                        row = row + SEPARATOR;
-                                    }
-                                    // wrap value in double quotes
-                                    row = row + '"' + value + '"';
-                                });
-                                appendCsvRow(row);
-                                rowCount++;
-                            }
+                                        if (!value) {
+                                            value = '';
+                                        }
+    
+                                        if (valuePreprocessor) {
+                                            value = valuePreprocessor(key, value);
+                                        }
+                                        // escape double quotes
+                                        if (typeof value === 'string') {
+                                            value = value.replace(new RegExp('"', 'g'), '""');
+                                        }
+        
+                                        if (index) {
+                                            row = row + SEPARATOR;
+                                        }
+                                        // wrap value in double quotes
+                                        row = row + '"' + value + '"';
+                                    });
+                                    appendCsvRow(row);
+                                    rowCount++;
+                                }
 
-                            appendHandler();
+                                let row = '';
+                                appendHandler();
+                            }
 
                         }).catch(function () {
 
@@ -139,7 +156,7 @@
                     });
                 });
             }
-            return Promise.all([writeStreamIntoCsvFile(streamItems, soValuePreprocessor, [userEnricher, questionEnricher]), writeStreamIntoCsvFile(localStreamItems)])
+            return Promise.all([writeStreamIntoCsvFile(streamItems, soValuePreprocessor, [userEnricher, questionEnricher], [filterQuestionByOwnerUserReputation]),       writeStreamIntoCsvFile(localStreamItems)])
                 .then(function (result) {
                     return new Promise((resolve, reject) => {
 

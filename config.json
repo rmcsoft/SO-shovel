@@ -8,14 +8,15 @@
             "tags": ["nginx"],
             "scoreThreshold": 5,
             "favoriteCount": 10,
-            "userReputation": 900
+            "userReputation": 300
         },
         "answers": {
-            "scoreThreshold": 3,
-            "favoriteCount": 5,
-            "userReputation": 1000
+            "scoreThreshold": 0,
+            "favoriteCount": 0,
+            "userReputation": 0
         }
     },
+    "fields": ["id", "tags", "body", "ownerUserReputation"],
     "separator": ",",
     "normalizedDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/normalized-dump.csv",
     "dumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Posts.xml",

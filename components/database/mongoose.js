@@ -10,7 +10,7 @@
     UserModel = mongoose.model('User', userSchema),
     PostModel = mongoose.model('Post', postSchema);
 
-    //mongoose.set('debug', true);
+    // mongoose.set('debug', true);
     mongoose.Promise = global.Promise;
 
     let dbPromise = mongoose.connect(config.get('mongoose:uri'), {
