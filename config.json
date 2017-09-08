@@ -12,8 +12,7 @@
         },
         "answers": {
             "scoreThreshold": 0,
-            "favoriteCount": 0,
-            "userReputation": 0
+            "favoriteCount": 0
         }
     },
     "fields": ["id", "tags", "body", "ownerUserReputation"],

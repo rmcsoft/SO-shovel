@@ -11,7 +11,6 @@
 
     let answersScoreThreshold = config.get('filters:answers:scoreThreshold'),
         answersFavoriteCount = config.get('filters:answers:favoriteCount'),
-        answersUserReputation = config.get('filters:answers:userReputation'),
         questionsUserReputation = config.get('filters:questions:userReputation'),
         fields = config.get('fields');
 

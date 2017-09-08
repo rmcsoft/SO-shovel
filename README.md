@@ -13,15 +13,34 @@ http://${host}:${port}
 ### Configuration file format
 ```
 {
-    "port" : 1337, // port to listen on
-    "mongoose": {
-        "uri": "mongodb://localhost:27017/stackoverflow-dump" // uri to connect to MongoDB
+  "port": 1337, // port to listen on
+  "mongoose": {
+    "uri": "mongodb://localhost:27017/rd-stackoverflow" // uri to connect to MongoDB
+  },
+  "filters": {
+    "questions": {
+      "tags": [ // tags to filter questions by
+        "nginx"
+      ],
+      "scoreThreshold": 5, // score threshold to filter questions by
+      "favoriteCount": 10, // favorite count threshold to filter questions by
+      "userReputation": 300 // user reputation threshold to filter questions by
     },
-    "scoreThreshold": 0, // score threshold to filter messages by
-    "tags": ["nginx", "tomcat", "glassfish"], // tags to filter messages by
-    "separator": ",", // separator to use on writing normalized data in CSV file
-    "normalizedDumpFilepath": "/home/user/normalized-dump.csv", // path to the file where normalized data will be stored
-    "dumpFilepath": "/home/user/Posts.xml" // path to the file with SO dump
+    "answers": {
+      "scoreThreshold": 0, // score threshold to filter answers by
+      "favoriteCount": 0 // favorite count threshold to filter answers by
+    }
+  },
+  "fields": [ // order of fields to write into CSV file in
+    "id",
+    "tags",
+    "body",
+    "ownerUserReputation"
+  ],
+  "separator": ",", // separator to use on writing normalized data in CSV file
+  "normalizedDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/normalized-dump.csv", // path to the file where normalized data will be stored
+  "dumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Posts.xml", // path to the file with SO dump
+  "usersDumpFilepath": "/media/dmitry/2E4AB1034AB0C8BB/PFT/Users.xml" // path to the file with SO users dump
 }
 ```
 ### Format of CSV file with normalized data
