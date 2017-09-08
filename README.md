@@ -49,6 +49,7 @@ Field|Description
 id|Message identifier in SO database. Can be used for mapping or as meta data.
 body|Body of message with HTML tags.
 tags|list of tags message marked with.
+ownerUserReputation|Reputation of the user that created a question
 ### REST API
 Method|URI|Description
 ------|---|-----------
