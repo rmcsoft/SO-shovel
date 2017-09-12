@@ -1,5 +1,5 @@
 # SO-shovel
-SO-shovel is an application to process [Stackoverflow dump](https://archive.org/details/stackexchange), normalize it and extract data that can be used during analysis of errors in the logs of different applications. SO-shovel written in javascript and can be run with NodeJS. It has web GUI developed with JQuery and Bootstrap.
+SO-shovel is an application to process [Stackoverflow dump](https://archive.org/details/stackexchange), normalize it and extract data that can be used during analysis of errors in the logs of different applications. SO-shovel written in javascript and can be run with NodeJS. It has web GUI developed with ReactJS, Typescript, webpack and Bootstrap.
 ### Dump format
 SO-shovel assumes that SO dump corresponds to [a certain format](https://meta.stackexchange.com/questions/2677/database-schema-documentation-for-the-public-data-dump-and-sede).
 ### Starting the application
