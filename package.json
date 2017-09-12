@@ -4,7 +4,8 @@
   "description": "Adapter to normalize Stackoverflow posts dump and provide it in CSV format.",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack"
   },
   "keywords": [
     "stackoverflow",
@@ -13,14 +14,32 @@
   "author": "Dmitry Lebedko",
   "license": "ISC",
   "dependencies": {
+    "@types/node": "^8.0.28",
     "archiver": "^2.0.3",
+    "axios": "^0.16.2",
     "body-parser": "^1.17.2",
+    "events": "^1.1.1",
     "express": "^4.15.4",
+    "flux": "^3.1.3",
+    "moment": "^2.18.1",
     "mongoose": "^4.11.8",
     "morgan": "^1.8.2",
     "nconf": "^0.8.4",
     "node-expat": "^2.3.16",
+    "nprogress": "^0.2.0",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-moment": "^0.6.5",
+    "react-notification-system": "^0.2.15",
     "serve-favicon": "^2.4.3",
     "winston": "^2.3.1"
+  },
+  "devDependencies": {
+    "@types/flux": "^3.1.3",
+    "@types/nprogress": "0.0.29",
+    "@types/react-notification-system": "^0.2.35",
+    "ts-loader": "^2.3.7",
+    "typescript": "^2.5.2",
+    "webpack": "^3.5.6"
   }
 }

@@ -6,15 +6,10 @@
 
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/bower_components/noty/lib/noty.js"></script>
-    <script src="/bower_components/moment/moment.js"></script>
     <script src="/bower_components/nprogress/nprogress.js"></script>
-
-    <script src="js/index.js" type="text/javascript"></script>
 
     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="/bower_components/components-font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="/bower_components/noty/lib/noty.css" rel="stylesheet">
     <link href="/bower_components/nprogress/nprogress.css" rel="stylesheet">
 
     <link href="css/index.css" rel="stylesheet">
@@ -33,37 +28,11 @@
             </h4>
         </div>
 
-        <div class="panel">
-            <h4>Installed dump info</h4>
-            <div>Modification date: <span id="dumpModificationDateInfoDiv"></span></div>
-            <div>Dump size: <span id="dumpSizeDiv"></span></div>
+        <div id="root">
         </div>
-
-
-        <div class="panel">
-            <h4>Configuration</h4>
-            <pre id="configDiv">
-
-            </pre>
-        </div>
-
-        <div>
-            <button id="extractNormalizedDataBtn" type="button" class="btn btn-primary">
-                        Extract normalized data
-                    </button>
-
-            <button id="updateSoDumpBtn" type="button" class="btn btn-primary">
-                        Update SO dump
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
-                    </button>
-
-            <button id="updateSoUserDumpBtn" type="button" class="btn btn-primary">
-                        Update SO user dump
-                        <i class="fa fa-refresh" aria-hidden="true"></i>
-                    </button>
-        </div>
-
     </div>
+
+    <script src="js/build/bundle.js"></script>
 
 </body>
 
