@@ -6,7 +6,7 @@ import UpdateSoUserDumpButton from "./UpdateSoUserDumpButton";
 class Buttons extends React.Component<any, any> {
 
     render() {
-        return <div>
+        return <div className="btn-toolbar">
             <ExtractNormalizedDataButton />
             <UpdateSoDumpButton />
             <UpdateSoUserDumpButton />
