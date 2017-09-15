@@ -4,8 +4,8 @@ import InstalledDumpInfo from "./InstalledDumpInfo";
 import ConfigPanel from "./ConfigPanel";
 import Buttons from "./Buttons";
 import * as NotificationSystem from "react-notification-system";
-import { ActionStore } from './ActionStore';
-import * as ActionTypes from './ActionTypes';
+import { ActionStore } from '../../ActionStore';
+import * as ActionTypes from '../../ActionTypes';
 
 class App extends React.Component<any, any> {
 

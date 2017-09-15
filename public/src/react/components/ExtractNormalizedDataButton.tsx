@@ -2,11 +2,11 @@
 import * as React from "react";
 import axios from "axios";
 import * as NProgress from "nprogress";
-import { ActionStore } from './ActionStore';
-import * as ActionTypes from './ActionTypes';
-import { Actions } from './actions/Actions';
+import { ActionStore } from '../../ActionStore';
+import * as ActionTypes from '../../ActionTypes';
+import { Actions } from '../../actions/Actions';
 
-class UpdateSoUserDumpButton extends React.Component<any, any> {
+class ExtractNormalizedDataButton extends React.Component<any, any> {
 
     constructor() {
         super();
@@ -25,10 +25,12 @@ class UpdateSoUserDumpButton extends React.Component<any, any> {
         })
     }
 
-    updateSoUserDump() {
+    extractNormalizedData() {
+
         NProgress.start();
         Actions.toggleFileOperation();
-        axios.get('/api/users/update').then(function (response: any) {
+
+        axios.get('/api/write-csv').then(function (response: any) {
             Actions.showMessage(response.data.toString());
             Actions.toggleFileOperation();
             NProgress.done();
@@ -41,12 +43,11 @@ class UpdateSoUserDumpButton extends React.Component<any, any> {
 
     render() {
 
-        return <button id="updateSoUserDumpBtn" disabled={this.state.disabled} onClick={this.updateSoUserDump} type="button" className="btn btn-primary">
-            Update SO user dump
-                        <i className="fa fa-refresh" aria-hidden="true"></i>
-        </button>;
+        return <button disabled={this.state.disabled} onClick={this.extractNormalizedData} type="button" className="btn btn-primary">
+            Extract normalized data
+                    </button>;
 
     }
 }
 
-export default UpdateSoUserDumpButton;
+export default ExtractNormalizedDataButton;

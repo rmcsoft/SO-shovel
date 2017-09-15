@@ -2,11 +2,12 @@
 import * as React from "react";
 import axios from "axios";
 import * as NProgress from "nprogress";
-import { ActionStore } from './ActionStore';
-import * as ActionTypes from './ActionTypes';
-import { Actions } from './actions/Actions';
+import { ActionStore } from '../../ActionStore';
+import * as ActionTypes from '../../ActionTypes';
+import { Actions } from '../../actions/Actions';
 
-class ExtractNormalizedDataButton extends React.Component<any, any> {
+class UpdateSoDumpButton extends React.Component<any, any> {
+
 
     constructor() {
         super();
@@ -25,12 +26,13 @@ class ExtractNormalizedDataButton extends React.Component<any, any> {
         })
     }
 
-    extractNormalizedData() {
+    updateSoDump() {
 
         NProgress.start();
         Actions.toggleFileOperation();
 
-        axios.get('/api/write-csv').then(function (response: any) {
+        axios.get('/api/update-dump').then(function (response: any) {
+
             Actions.showMessage(response.data.toString());
             Actions.toggleFileOperation();
             NProgress.done();
@@ -43,11 +45,12 @@ class ExtractNormalizedDataButton extends React.Component<any, any> {
 
     render() {
 
-        return <button disabled={this.state.disabled} onClick={this.extractNormalizedData} type="button" className="btn btn-primary">
-            Extract normalized data
-                    </button>;
+        return <button id="updateSoDumpBtn" disabled={this.state.disabled} onClick={this.updateSoDump} type="button" className="btn btn-primary">
+            Update SO dump
+                        <i className="fa fa-refresh" aria-hidden="true"></i>
+        </button>;
 
     }
 }
 
-export default ExtractNormalizedDataButton;
+export default UpdateSoDumpButton;

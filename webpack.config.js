@@ -6,7 +6,7 @@ var config = {
    * recursively go through every "require" statement in app.ts and
    * efficiently build out the application's dependency tree.
    */
-  entry: ["./public/js/app.tsx"],
+  entry: ["./public/src/react/components/app.tsx"],
 
   devtool: 'inline-source-map',
 
@@ -15,7 +15,7 @@ var config = {
    * the final bundled JavaScript file and where to store this file.
    */
   output: {
-    path: path.resolve(__dirname + "/public/js", "build"),
+    path: path.resolve(__dirname + "/public", "build"),
     filename: "bundle.js"
   },
 
